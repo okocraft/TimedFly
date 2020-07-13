@@ -150,7 +150,6 @@ public final class TimedFly extends JavaPlugin {
         MessageUtil.sendConsoleMessage("&cLooking for hooks...");
 
         Hooks.hookVault();
-        Hooks.hookPlayerPoints();
         Hooks.hookTokenManager();
         Hooks.registerOtherCurrencies();
         Hooks.hookPapi(this);

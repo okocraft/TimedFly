@@ -1,7 +1,6 @@
 package me.jackint0sh.timedfly.hooks;
 
 import me.jackint0sh.timedfly.hooks.currencies.Exp;
-import me.jackint0sh.timedfly.hooks.currencies.HPlayerPoints;
 import me.jackint0sh.timedfly.hooks.currencies.HTokenManager;
 import me.jackint0sh.timedfly.hooks.currencies.HVault;
 import me.jackint0sh.timedfly.hooks.currencies.Item;
@@ -43,13 +42,6 @@ public class Hooks {
         if (isPluginEnabled("PlaceholderAPI")) {
             new HPlaceholderAPI(plugin).register();
             MessageUtil.sendConsoleMessage("&cHooked to PlaceholderAPI!");
-        }
-    }
-
-    public static void hookPlayerPoints() {
-        if (isPluginEnabled("PlayerPoints")) {
-            CurrencyManager.addCurrency(new HPlayerPoints());
-            MessageUtil.sendConsoleMessage("&cHooked to PlayerPoints!");
         }
     }
 
