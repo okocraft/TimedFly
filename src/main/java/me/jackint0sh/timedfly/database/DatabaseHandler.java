@@ -43,6 +43,8 @@ public class DatabaseHandler {
                     MessageUtil.sendConsoleMessage("&7Successfully connected to database.");
                 });
                 break;
+
+        /*
             case "mysql":
                 String host = config.getString("Database.Server.Host"),
                         username = config.getString("Database.Server.Username"),
@@ -66,6 +68,7 @@ public class DatabaseHandler {
                 break;
             default:
                 break;
+         */
         }
 
         if (database instanceof SQL) ((SQL) database).startProcess();
