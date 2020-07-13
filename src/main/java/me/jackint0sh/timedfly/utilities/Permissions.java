@@ -1,6 +1,6 @@
 package me.jackint0sh.timedfly.utilities;
 
-public enum  Permissions {
+public enum Permissions {
 
     ADMIN("timedfly.admin", "Get access to everything."),
     RELOAD("timedfly.reload", "Reload the plugin."),

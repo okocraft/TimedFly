@@ -1,6 +1,11 @@
 package me.jackint0sh.timedfly.hooks;
 
-import me.jackint0sh.timedfly.hooks.currencies.*;
+import me.jackint0sh.timedfly.hooks.currencies.Exp;
+import me.jackint0sh.timedfly.hooks.currencies.HPlayerPoints;
+import me.jackint0sh.timedfly.hooks.currencies.HTokenManager;
+import me.jackint0sh.timedfly.hooks.currencies.HVault;
+import me.jackint0sh.timedfly.hooks.currencies.Item;
+import me.jackint0sh.timedfly.hooks.currencies.Levels;
 import me.jackint0sh.timedfly.managers.CurrencyManager;
 import me.jackint0sh.timedfly.utilities.MessageUtil;
 import net.milkbowl.vault.economy.Economy;

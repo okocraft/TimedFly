@@ -42,6 +42,10 @@ public class FlyInventory {
         FlyInventory.inventories.put(MessageUtil.color(title), this);
     }
 
+    public static FlyInventory getFlyInventory(String title) {
+        return FlyInventory.inventories.get(MessageUtil.color(title));
+    }
+
     public FlyInventory addItem(Item itemStack) {
         this.inventory.addItem(itemStack);
         this.items.put(items.size() - (items.size() == 0 ? 0 : 1), itemStack);
@@ -73,16 +77,6 @@ public class FlyInventory {
         this.items.put(location, itemStack);
     }
 
-    public FlyInventory setItems(Item... itemStack) {
-        this.items.clear();
-        for (int i = 0; i < itemStack.length; i++) {
-            Item item = itemStack[i];
-            this.inventory.setItem(i, item);
-            this.items.put(i, item);
-        }
-        return this;
-    }
-
     public Item getItem(int slot) {
         return this.items.get(slot);
     }
@@ -95,12 +89,18 @@ public class FlyInventory {
         return this.items;
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public FlyInventory setItems(Item... itemStack) {
+        this.items.clear();
+        for (int i = 0; i < itemStack.length; i++) {
+            Item item = itemStack[i];
+            this.inventory.setItem(i, item);
+            this.items.put(i, item);
+        }
+        return this;
     }
 
-    public static FlyInventory getFlyInventory(String title) {
-        return FlyInventory.inventories.get(MessageUtil.color(title));
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public void clearInventory() {
@@ -123,7 +123,7 @@ public class FlyInventory {
                         Map<Integer, ItemStack> contents = player.getInventory().addItem(item);
                         if (!contents.isEmpty()) player.getWorld().dropItem(player.getLocation(), item);
                     });
-            if (this.closeConsumer != null){
+            if (this.closeConsumer != null) {
                 this.closeConsumer.andThen(event -> this.clearInventory()).accept((InventoryCloseEvent) e);
             }
         }

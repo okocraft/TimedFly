@@ -41,11 +41,6 @@ public class Item extends ItemStack {
         this.setKey(flyItem.getKey());
     }
 
-    public Item setKey(String key) {
-        ServerVersion.getSupportedVersion().setNBT(this, "key", key);
-        return this;
-    }
-
     public Item(String material) {
         this(Material.valueOf(material.toUpperCase()));
     }
@@ -58,6 +53,11 @@ public class Item extends ItemStack {
     public Item(ItemStack itemStack) {
         super(itemStack);
         loadItem();
+    }
+
+    public Item setKey(String key) {
+        ServerVersion.getSupportedVersion().setNBT(this, "key", key);
+        return this;
     }
 
     public boolean toggled() {

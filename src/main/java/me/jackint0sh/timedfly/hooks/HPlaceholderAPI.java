@@ -17,13 +17,8 @@ public class HPlaceholderAPI extends PlaceholderExpansion {
     }
 
     @Override
-    public boolean persist() {
-        return true;
-    }
-
-    @Override
-    public boolean canRegister() {
-        return true;
+    public String getIdentifier() {
+        return "timedfly";
     }
 
     @Override
@@ -32,13 +27,18 @@ public class HPlaceholderAPI extends PlaceholderExpansion {
     }
 
     @Override
-    public String getIdentifier() {
-        return "timedfly";
+    public String getVersion() {
+        return plugin.getDescription().getVersion();
     }
 
     @Override
-    public String getVersion() {
-        return plugin.getDescription().getVersion();
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
+    public boolean canRegister() {
+        return true;
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class FlyItem {
+    private static final Map<String, FlyItem> configItemMap = new HashMap<>();
     private String key;
     private String name;
     private String material;
@@ -40,7 +41,6 @@ public class FlyItem {
     private boolean enableOnFlyDisable;
     private Currency currency;
     private Material currency_item;
-    private static final Map<String, FlyItem> configItemMap = new HashMap<>();
 
     public FlyItem() {
         this.key = UUID.randomUUID().toString();

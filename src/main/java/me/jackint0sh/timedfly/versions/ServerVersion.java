@@ -10,6 +10,10 @@ public abstract class ServerVersion {
 
     protected static ServerVersion serverVersion;
 
+    public static ServerVersion getSupportedVersion() {
+        return serverVersion;
+    }
+
     public void sendActionBar(Player player, String text) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(MessageUtil.color(text)));
     }
@@ -27,8 +31,4 @@ public abstract class ServerVersion {
     public abstract boolean hasTag(ItemStack itemStack, String key);
 
     public abstract String getTag(ItemStack itemStack, String key);
-
-    public static ServerVersion getSupportedVersion() {
-        return serverVersion;
-    }
 }

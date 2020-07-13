@@ -32,6 +32,79 @@ public class PlayerListener implements Listener {
         this.updateManager = updateManager;
     }
 
+    public static boolean handlePlayerQuery(PlayerManager playerManager, boolean update) {
+        AtomicBoolean bool = new AtomicBoolean(true);
+        String[] keys = {
+                "UUID", "Name", "TimeLeft", "InitialTime", "CurrentTimeLimit",
+                "TimeLimitCooldownExpires", "TimeRunning", "TimePaused", "SaveDate"
+        };
+        Object[] values = {
+                playerManager.getPlayerUuid().toString(), playerManager.getPlayer().getName(), playerManager.getTimeLeft(),
+                playerManager.getInitialTime(), playerManager.getCurrentTimeLimit(),
+                playerManager.getLimitCooldown(), playerManager.isTimeRunning(), playerManager.isTimePaused(), "CURRENT_TIMESTAMP"
+        };
+
+        AsyncDatabase database = DatabaseHandler.getDatabase();
+        if (update) {
+            database.update(keys, values, (error, result) -> {
+                if (error != null) {
+                    error.printStackTrace();
+                    bool.set(false);
+                }
+            });
+        } else {
+            database.select("*", "UUID", playerManager.getPlayerUuid().toString(), (e, r) -> {
+                if (e != null) {
+                    e.printStackTrace();
+                    bool.set(false);
+
+                    if (r == null || r.isEmpty()) {
+                        database.insert(keys, values, (error, result) -> {
+                            if (error != null) {
+                                error.printStackTrace();
+                                bool.set(false);
+                            }
+                        });
+                    }
+                    return;
+                }
+
+                playerManager.setTimeRunning((Integer) r.get("TimeRunning") != 0)
+                        .setTimePaused((Integer) r.get("TimePaused") != 0);
+
+                Object initialTime = r.get("InitialTime");
+                Object limitCooldown = r.get("TimeLimitCooldownExpires");
+
+                playerManager.setInitialTime(Long.parseLong(String.valueOf(initialTime)));
+
+                playerManager.setLimitCooldown(Long.parseLong(String.valueOf(limitCooldown)));
+
+                if (!playerManager.isTimeRunning()) {
+                    Object timeLeft = r.get("TimeLeft");
+                    playerManager.setTimeLeft(Long.parseLong(String.valueOf(timeLeft)));
+                }
+
+                if (!playerManager.resetCurrentTimeLimit()) {
+                    Object limit = r.get("CurrentTimeLimit");
+                    playerManager.setCurrentTimeLimit(Long.parseLong(String.valueOf(limit)));
+                }
+
+                Player player = playerManager.getPlayer();
+                if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) return;
+                playerManager.setOnFloor(player.isOnGround());
+                if (!playerManager.isTimePaused() && playerManager.hasTime()) {
+                    if (Config.getConfig("config").get().getBoolean("JoinFlying.Enable")) {
+                        int height = Config.getConfig("config").get().getInt("JoinFlying.Height");
+                        player.teleport(player.getLocation().add(0, height, 0));
+                        playerManager.setOnFloor(false);
+                    }
+                    if (!playerManager.isAttacking()) playerManager.startTimer();
+                } else if (!playerManager.hasTime() && playerManager.isTimeRunning()) playerManager.stopTimer();
+            });
+        }
+        return bool.get();
+    }
+
     @EventHandler
     public void onReSpawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
@@ -163,78 +236,5 @@ public class PlayerListener implements Listener {
             }
             if (!playerManager.isTimeRunning()) PlayerManager.getPlayerCache().remove(player.getUniqueId());
         }
-    }
-
-    public static boolean handlePlayerQuery(PlayerManager playerManager, boolean update) {
-        AtomicBoolean bool = new AtomicBoolean(true);
-        String[] keys = {
-                "UUID", "Name", "TimeLeft", "InitialTime", "CurrentTimeLimit",
-                "TimeLimitCooldownExpires", "TimeRunning", "TimePaused", "SaveDate"
-        };
-        Object[] values = {
-                playerManager.getPlayerUuid().toString(), playerManager.getPlayer().getName(), playerManager.getTimeLeft(),
-                playerManager.getInitialTime(), playerManager.getCurrentTimeLimit(),
-                playerManager.getLimitCooldown(), playerManager.isTimeRunning(), playerManager.isTimePaused(), "CURRENT_TIMESTAMP"
-        };
-
-        AsyncDatabase database = DatabaseHandler.getDatabase();
-        if (update) {
-            database.update(keys, values, (error, result) -> {
-                if (error != null) {
-                    error.printStackTrace();
-                    bool.set(false);
-                }
-            });
-        } else {
-            database.select("*", "UUID", playerManager.getPlayerUuid().toString(), (e, r) -> {
-                if (e != null) {
-                    e.printStackTrace();
-                    bool.set(false);
-
-                    if (r == null || r.isEmpty()) {
-                        database.insert(keys, values, (error, result) -> {
-                            if (error != null) {
-                                error.printStackTrace();
-                                bool.set(false);
-                            }
-                        });
-                    }
-                    return;
-                }
-
-                playerManager.setTimeRunning((Integer) r.get("TimeRunning") != 0)
-                        .setTimePaused((Integer) r.get("TimePaused") != 0);
-
-                Object initialTime = r.get("InitialTime");
-                Object limitCooldown = r.get("TimeLimitCooldownExpires");
-
-                playerManager.setInitialTime(Long.parseLong(String.valueOf(initialTime)));
-
-                playerManager.setLimitCooldown(Long.parseLong(String.valueOf(limitCooldown)));
-
-                if (!playerManager.isTimeRunning()) {
-                    Object timeLeft = r.get("TimeLeft");
-                    playerManager.setTimeLeft(Long.parseLong(String.valueOf(timeLeft)));
-                }
-
-                if (!playerManager.resetCurrentTimeLimit()) {
-                    Object limit = r.get("CurrentTimeLimit");
-                    playerManager.setCurrentTimeLimit(Long.parseLong(String.valueOf(limit)));
-                }
-
-                Player player = playerManager.getPlayer();
-                if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) return;
-                playerManager.setOnFloor(player.isOnGround());
-                if (!playerManager.isTimePaused() && playerManager.hasTime()) {
-                    if (Config.getConfig("config").get().getBoolean("JoinFlying.Enable")) {
-                        int height = Config.getConfig("config").get().getInt("JoinFlying.Height");
-                        player.teleport(player.getLocation().add(0, height, 0));
-                        playerManager.setOnFloor(false);
-                    }
-                    if (!playerManager.isAttacking()) playerManager.startTimer();
-                } else if (!playerManager.hasTime() && playerManager.isTimeRunning()) playerManager.stopTimer();
-            });
-        }
-        return bool.get();
     }
 }

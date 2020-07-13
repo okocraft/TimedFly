@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatabaseHandler {
 
-    private static AsyncDatabase database;
     private static final Plugin plugin = Bukkit.getPluginManager().getPlugin("TimedFly");
+    private static AsyncDatabase database;
 
     public static boolean initialize() {
         MessageUtil.sendConsoleMessage("&cConnecting to database...");

@@ -23,8 +23,8 @@ public abstract class SQL implements AsyncDatabase {
 
     final BlockingDeque<Consumer<Connection>> queue;
     private final Plugin plugin;
-    Connection conn;
     private final ReentrantLock lock;
+    Connection conn;
 
     SQL(Plugin plugin) {
         this.plugin = plugin;

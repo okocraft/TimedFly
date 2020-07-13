@@ -16,6 +16,10 @@ public class TimedFlyEndEvent extends Event {
         this.player = playerManager.getPlayer();
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public PlayerManager getPlayerManager() {
         return playerManager;
     }
@@ -30,10 +34,6 @@ public class TimedFlyEndEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

@@ -156,9 +156,9 @@ Check-For-Updates:
   # Auto download new updates
   Auto-Download: false
 
-# Choose your own message file, if the language is not found english will be used.
-# Current languages english, spanish, hu, de, you can create your own and send it to me.
-# Do not edit any of the languages because they will get re-generated on every restart.
+  # Choose your own message file, if the language is not found english will be used.
+  # Current languages english, spanish, hu, de, you can create your own and send it to me.
+  # Do not edit any of the languages because they will get re-generated on every restart.
   # this is to update the file in case there are new values.
   # If you want to use your own make another file with the name you want.
 Language: english

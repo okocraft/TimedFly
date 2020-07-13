@@ -15,14 +15,22 @@ public class Config {
 
     private static final ConcurrentMap<String, Config> configMap = new ConcurrentHashMap<>();
     private final Plugin plugin;
+    private final String name;
     private File file;
     private FileConfiguration fileConfiguration;
-    private final String name;
 
     public Config(String name, Plugin plugin) {
         this.name = name + ".yml";
         this.plugin = plugin;
         Config.configMap.put(name, this);
+    }
+
+    public static Config getConfig(String name) {
+        return configMap.get(name);
+    }
+
+    public static Map<String, Config> getConfigs() {
+        return configMap;
     }
 
     public Config create() throws IOException, InvalidConfigurationException {
@@ -53,13 +61,5 @@ public class Config {
 
     public String getName() {
         return name;
-    }
-
-    public static Config getConfig(String name) {
-        return configMap.get(name);
-    }
-
-    public static Map<String, Config> getConfigs() {
-        return configMap;
     }
 }

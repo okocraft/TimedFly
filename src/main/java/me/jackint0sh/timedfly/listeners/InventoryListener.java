@@ -14,26 +14,6 @@ import java.util.function.Consumer;
 
 public class InventoryListener implements Listener {
 
-    @EventHandler
-    private void onClick(InventoryClickEvent event) {
-        FlyInventory flyInventory = FlyInventory.getFlyInventory(event.getView().getTitle());
-        if (flyInventory != null && event.getClickedInventory() != null && event.getClickedInventory().equals(flyInventory.getInventory())) {
-            Item flyItem = flyInventory.getItem(event.getSlot());
-            if (flyItem != null) {
-                flyItem.callEvent(event);
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    private void onClose(InventoryCloseEvent event) {
-        FlyInventory flyInventory = FlyInventory.getFlyInventory(event.getView().getTitle());
-        if (flyInventory != null && event.getInventory().equals(flyInventory.getInventory())) {
-            flyInventory.callEvent(event);
-        }
-    }
-
     public static void runCommands(FlyItem item, String type, HumanEntity player) {
         String CONSOLE = "[console] ", PLAYER = "[player] ", SOUND = "[sound] ";
         Consumer<String> consumer = command -> {
@@ -56,6 +36,26 @@ public class InventoryListener implements Listener {
                     item.getOnFlyDisable().forEach(consumer);
                 }
                 break;
+        }
+    }
+
+    @EventHandler
+    private void onClick(InventoryClickEvent event) {
+        FlyInventory flyInventory = FlyInventory.getFlyInventory(event.getView().getTitle());
+        if (flyInventory != null && event.getClickedInventory() != null && event.getClickedInventory().equals(flyInventory.getInventory())) {
+            Item flyItem = flyInventory.getItem(event.getSlot());
+            if (flyItem != null) {
+                flyItem.callEvent(event);
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    private void onClose(InventoryCloseEvent event) {
+        FlyInventory flyInventory = FlyInventory.getFlyInventory(event.getView().getTitle());
+        if (flyInventory != null && event.getInventory().equals(flyInventory.getInventory())) {
+            flyInventory.callEvent(event);
         }
     }
 }

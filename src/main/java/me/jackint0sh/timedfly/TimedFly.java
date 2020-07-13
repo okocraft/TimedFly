@@ -39,6 +39,22 @@ public final class TimedFly extends JavaPlugin {
     private UpdateManager updateManager;
 
     @Override
+    public void onDisable() {
+        MessageUtil.sendConsoleMessage("&cShutting down TimedFly...");
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (FlyInventory.inventories.containsKey(player.getOpenInventory().getTitle())) {
+                player.closeInventory();
+            }
+            PlayerManager playerManager = PlayerManager.getCachedPlayer(player.getUniqueId()).setTimeRunning(false);
+            PlayerListener.handlePlayerQuery(playerManager, true);
+        });
+
+        DatabaseHandler.close();
+        MessageUtil.sendConsoleMessage("&cTimedFly disabled!");
+    }
+
+    @Override
     public void onEnable() {
         updateManager = new UpdateManager(48668, this.getDescription().getVersion());
 
@@ -74,22 +90,6 @@ public final class TimedFly extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDisable() {
-        MessageUtil.sendConsoleMessage("&cShutting down TimedFly...");
-
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            if (FlyInventory.inventories.containsKey(player.getOpenInventory().getTitle())) {
-                player.closeInventory();
-            }
-            PlayerManager playerManager = PlayerManager.getCachedPlayer(player.getUniqueId()).setTimeRunning(false);
-            PlayerListener.handlePlayerQuery(playerManager, true);
-        });
-
-        DatabaseHandler.close();
-        MessageUtil.sendConsoleMessage("&cTimedFly disabled!");
     }
 
     private void registerCommands() {

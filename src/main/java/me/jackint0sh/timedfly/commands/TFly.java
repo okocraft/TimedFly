@@ -2,7 +2,11 @@ package me.jackint0sh.timedfly.commands;
 
 import me.jackint0sh.timedfly.flygui.inventories.FlightStore;
 import me.jackint0sh.timedfly.managers.PlayerManager;
-import me.jackint0sh.timedfly.utilities.*;
+import me.jackint0sh.timedfly.utilities.Config;
+import me.jackint0sh.timedfly.utilities.Languages;
+import me.jackint0sh.timedfly.utilities.MessageUtil;
+import me.jackint0sh.timedfly.utilities.Permissions;
+import me.jackint0sh.timedfly.utilities.TimeParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,6 +19,80 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TFly implements CommandExecutor {
+
+    static void toggleTimer(String[] args, CommandSender sender, ToggleType type) {
+        Player player;
+        if (args != null && args.length > 1) {
+            player = Bukkit.getPlayerExact(args[args.length - 1]);
+            if (isPlayerNotOnline(player, sender)) return;
+        } else {
+            if (!(sender instanceof Player)) {
+                MessageUtil.sendTranslation(sender, "error.player.not_player");
+                return;
+            }
+            player = (Player) sender;
+        }
+
+        PlayerManager playerManager = PlayerManager.getCachedPlayer(player.getUniqueId());
+        if (playerManager == null) {
+            MessageUtil.sendTranslation(player, "error.unknown", new String[][]{{
+                    "[line]", new Throwable().getStackTrace()[0].getLineNumber() + ""
+            }});
+            return;
+        }
+
+        if (playerManager.isAttacking()) {
+            MessageUtil.sendTranslation(player, "fly.time.attack_mode.currently_active");
+            return;
+        }
+        if (!playerManager.handleWorldChange(null)) return;
+
+        if (player.equals(sender)) {
+            if (!PlayerManager.hasAnyPermission(player, Permissions.FLY_TOGGLE_SELF, Permissions.FLY_TOGGLE_SELF)) {
+                MessageUtil.sendNoPermission(player);
+                return;
+            }
+        } else {
+            if (!PlayerManager.hasAnyPermission(player, Permissions.FLY_TOGGLE_OTHERS, Permissions.FLY_TOGGLE)) {
+                MessageUtil.sendNoPermission(sender);
+                return;
+            }
+        }
+
+        if (!playerManager.hasTime()) {
+            MessageUtil.sendTranslation(player, "error.fly.not_running");
+            return;
+        }
+
+        if (type.equals(ToggleType.PAUSE)) {
+            playerManager.pauseTimer();
+            playerManager.setFromPlugin(false);
+        } else if (type.equals(ToggleType.RESUME)) {
+            playerManager.resumeTimer();
+            playerManager.setFromPlugin(true);
+        } else if (type.equals(ToggleType.TOGGLE)) {
+            if (playerManager.isTimePaused()) {
+                playerManager.resumeTimer();
+                playerManager.setFromPlugin(true);
+            } else {
+                playerManager.pauseTimer();
+                playerManager.setFromPlugin(false);
+            }
+        }
+
+        if (playerManager.isTimePaused()) MessageUtil.sendTranslation(player, "fly.time.toggle.pause");
+        else MessageUtil.sendTranslation(player, "fly.time.toggle.resume");
+
+    }
+
+    private static boolean isPlayerNotOnline(@Nullable Player player, CommandSender sender) {
+        if (player == null) {
+            MessageUtil.sendTranslation(sender, "error.player.not_online");
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -180,71 +258,6 @@ public class TFly implements CommandExecutor {
         }
     }
 
-    static void toggleTimer(String[] args, CommandSender sender, ToggleType type) {
-        Player player;
-        if (args != null && args.length > 1) {
-            player = Bukkit.getPlayerExact(args[args.length - 1]);
-            if (isPlayerNotOnline(player, sender)) return;
-        } else {
-            if (!(sender instanceof Player)) {
-                MessageUtil.sendTranslation(sender, "error.player.not_player");
-                return;
-            }
-            player = (Player) sender;
-        }
-
-        PlayerManager playerManager = PlayerManager.getCachedPlayer(player.getUniqueId());
-        if (playerManager == null) {
-            MessageUtil.sendTranslation(player, "error.unknown", new String[][]{{
-                    "[line]", new Throwable().getStackTrace()[0].getLineNumber() + ""
-            }});
-            return;
-        }
-
-        if (playerManager.isAttacking()) {
-            MessageUtil.sendTranslation(player, "fly.time.attack_mode.currently_active");
-            return;
-        }
-        if (!playerManager.handleWorldChange(null)) return;
-
-        if (player.equals(sender)) {
-            if (!PlayerManager.hasAnyPermission(player, Permissions.FLY_TOGGLE_SELF, Permissions.FLY_TOGGLE_SELF)) {
-                MessageUtil.sendNoPermission(player);
-                return;
-            }
-        } else {
-            if (!PlayerManager.hasAnyPermission(player, Permissions.FLY_TOGGLE_OTHERS, Permissions.FLY_TOGGLE)) {
-                MessageUtil.sendNoPermission(sender);
-                return;
-            }
-        }
-
-        if (!playerManager.hasTime()) {
-            MessageUtil.sendTranslation(player, "error.fly.not_running");
-            return;
-        }
-
-        if (type.equals(ToggleType.PAUSE)) {
-            playerManager.pauseTimer();
-            playerManager.setFromPlugin(false);
-        } else if (type.equals(ToggleType.RESUME)) {
-            playerManager.resumeTimer();
-            playerManager.setFromPlugin(true);
-        } else if (type.equals(ToggleType.TOGGLE)) {
-            if (playerManager.isTimePaused()) {
-                playerManager.resumeTimer();
-                playerManager.setFromPlugin(true);
-            } else {
-                playerManager.pauseTimer();
-                playerManager.setFromPlugin(false);
-            }
-        }
-
-        if (playerManager.isTimePaused()) MessageUtil.sendTranslation(player, "fly.time.toggle.pause");
-        else MessageUtil.sendTranslation(player, "fly.time.toggle.resume");
-
-    }
-
     private void timeLeft(String[] args, CommandSender sender) {
         Player player;
         if (args.length > 1) {
@@ -269,15 +282,6 @@ public class TFly implements CommandExecutor {
             }
         }
 
-    }
-
-    private static boolean isPlayerNotOnline(@Nullable Player player, CommandSender sender) {
-        if (player == null) {
-            MessageUtil.sendTranslation(sender, "error.player.not_online");
-            return true;
-        }
-
-        return false;
     }
 
     private void help(CommandSender sender) {

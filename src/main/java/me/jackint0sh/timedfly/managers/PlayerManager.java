@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class PlayerManager {
 
     private static final Map<UUID, PlayerManager> playerCache = new ConcurrentHashMap<>();
+    private final List<World> worlds;
     private BukkitTask attackTimer;
     private boolean fallDamage;
     private boolean attacking;
@@ -44,7 +45,6 @@ public class PlayerManager {
     private boolean fromPlugin;
     private String lastItemUsed;
     private boolean inBlacklistedWorld;
-    private final List<World> worlds;
 
     private PlayerManager(UUID playerUuid) {
         this(playerUuid, 0, 0, false, true, false);
@@ -66,47 +66,6 @@ public class PlayerManager {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         if (this.player == null) this.player = Bukkit.getOfflinePlayer(playerUuid).getPlayer();
-    }
-
-    public void startTimer() {
-        if (this.player.isOnline()) this.player.setAllowFlight(true);
-        if (!this.isOnFloor()) {
-            this.fromPlugin = true;
-            this.timeRunning = true;
-            if (this.player.isOnline()) this.player.setFlying(true);
-        }
-        TimerManager.startIfNot();
-        Bukkit.getPluginManager().callEvent(new TimedFlyStartEvent(this));
-    }
-
-    public void stopTimer() {
-        this.timeRunning = false;
-        this.fromPlugin = false;
-        if (this.player.isOnline()) {
-            this.player.setAllowFlight(false);
-            this.player.setFlying(false);
-            if (!this.player.isOnGround()) this.disableFallDamage();
-        }
-        Bukkit.getPluginManager().callEvent(new TimedFlyEndEvent(this));
-    }
-
-    public void pauseTimer() {
-        this.stopTimer();
-        this.timePaused = true;
-    }
-
-    public void resumeTimer() {
-        this.startTimer();
-        this.timePaused = false;
-    }
-
-    public PlayerManager setTimePaused(boolean b) {
-        this.timePaused = b;
-        return this;
-    }
-
-    public boolean hasPermission(Permissions permission) {
-        return PlayerManager.hasPermission(this.player, permission);
     }
 
     public static boolean hasPermission(Player player, Permissions permission) {
@@ -171,6 +130,60 @@ public class PlayerManager {
 
     public static boolean hasAnyPermission(CommandSender sender, Permissions... permissions) {
         return hasPermissions(sender, false, permissions);
+    }
+
+    public static void addPlayer(UUID uuid) {
+        playerCache.put(uuid, new PlayerManager(uuid, 0, 0, false, true, false));
+    }
+
+    public static PlayerManager getCachedPlayer(UUID uuid) {
+        if (playerCache.get(uuid) != null) return playerCache.get(uuid);
+        playerCache.put(uuid, new PlayerManager(uuid));
+        return playerCache.get(uuid);
+    }
+
+    public static Map<UUID, PlayerManager> getPlayerCache() {
+        return playerCache;
+    }
+
+    public static long getPlayersTimeLeft() {
+        return playerCache.values().stream().mapToLong(PlayerManager::getTimeLeft).sum();
+    }
+
+    public void startTimer() {
+        if (this.player.isOnline()) this.player.setAllowFlight(true);
+        if (!this.isOnFloor()) {
+            this.fromPlugin = true;
+            this.timeRunning = true;
+            if (this.player.isOnline()) this.player.setFlying(true);
+        }
+        TimerManager.startIfNot();
+        Bukkit.getPluginManager().callEvent(new TimedFlyStartEvent(this));
+    }
+
+    public void stopTimer() {
+        this.timeRunning = false;
+        this.fromPlugin = false;
+        if (this.player.isOnline()) {
+            this.player.setAllowFlight(false);
+            this.player.setFlying(false);
+            if (!this.player.isOnGround()) this.disableFallDamage();
+        }
+        Bukkit.getPluginManager().callEvent(new TimedFlyEndEvent(this));
+    }
+
+    public void pauseTimer() {
+        this.stopTimer();
+        this.timePaused = true;
+    }
+
+    public void resumeTimer() {
+        this.startTimer();
+        this.timePaused = false;
+    }
+
+    public boolean hasPermission(Permissions permission) {
+        return PlayerManager.hasPermission(this.player, permission);
     }
 
     public void enterAttackMode() {
@@ -266,27 +279,15 @@ public class PlayerManager {
         return this;
     }
 
-    public static void addPlayer(UUID uuid) {
-        playerCache.put(uuid, new PlayerManager(uuid, 0, 0, false, true, false));
-    }
-
-    public static PlayerManager getCachedPlayer(UUID uuid) {
-        if (playerCache.get(uuid) != null) return playerCache.get(uuid);
-        playerCache.put(uuid, new PlayerManager(uuid));
-        return playerCache.get(uuid);
-    }
-
-    public static Map<UUID, PlayerManager> getPlayerCache() {
-        return playerCache;
-    }
-
-    public static long getPlayersTimeLeft() {
-        return playerCache.values().stream().mapToLong(PlayerManager::getTimeLeft).sum();
-    }
-
     public Player getPlayer() {
         Player onlinePlayer = Bukkit.getPlayer(playerUuid);
         return onlinePlayer != null ? onlinePlayer : Bukkit.getOfflinePlayer(playerUuid).getPlayer();
+    }
+
+    public PlayerManager setPlayer(Player player) {
+        this.player = player;
+        this.playerUuid = player.getUniqueId();
+        return this;
     }
 
     public UUID getPlayerUuid() {
@@ -295,13 +296,6 @@ public class PlayerManager {
 
     public PlayerManager setPlayerUuid(UUID playerUuid) {
         this.playerUuid = playerUuid;
-        return this;
-    }
-
-
-    public PlayerManager setPlayer(Player player) {
-        this.player = player;
-        this.playerUuid = player.getUniqueId();
         return this;
     }
 
@@ -376,6 +370,11 @@ public class PlayerManager {
         return timePaused;
     }
 
+    public PlayerManager setTimePaused(boolean b) {
+        this.timePaused = b;
+        return this;
+    }
+
     public long getCurrentTimeLimit() {
         return this.currentTimeLimit;
     }
@@ -421,13 +420,13 @@ public class PlayerManager {
         return this.limitCoolDown;
     }
 
-    public String getLimitCooldownString() {
-        return TimeParser.toReadableString(limitCoolDown - System.currentTimeMillis());
-    }
-
     public PlayerManager setLimitCooldown(long l) {
         this.limitCoolDown = l;
         return this;
+    }
+
+    public String getLimitCooldownString() {
+        return TimeParser.toReadableString(limitCoolDown - System.currentTimeMillis());
     }
 
     public PlayerManager updateStore() {
