@@ -13,14 +13,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PlayerListener implements Listener {
 
-    private UpdateManager updateManager;
+    private final UpdateManager updateManager;
 
     public PlayerListener(UpdateManager updateManager) {
         this.updateManager = updateManager;
@@ -35,9 +41,7 @@ public class PlayerListener implements Listener {
         if (playerManager == null || !playerManager.isFromPlugin()) return;
 
         if (playerManager.isTimeRunning()) {
-            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugins()[0], () -> {
-                playerManager.setOnFloor(true).startTimer();
-            }, 2);
+            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugins()[0], () -> playerManager.setOnFloor(true).startTimer(), 2);
         }
     }
 

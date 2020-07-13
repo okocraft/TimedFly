@@ -7,7 +7,11 @@ import me.jackint0sh.timedfly.utilities.PluginTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.BlockingDeque;
@@ -17,10 +21,10 @@ import java.util.function.Consumer;
 
 public abstract class SQL implements AsyncDatabase {
 
-    private Plugin plugin;
-    private ReentrantLock lock;
+    final BlockingDeque<Consumer<Connection>> queue;
+    private final Plugin plugin;
     Connection conn;
-    BlockingDeque<Consumer<Connection>> queue;
+    private final ReentrantLock lock;
 
     SQL(Plugin plugin) {
         this.plugin = plugin;
@@ -137,22 +141,20 @@ public abstract class SQL implements AsyncDatabase {
             }
 
             if (keys.length != values.length) {
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    callback.handle(new Exception("Mismatch on keys and values length."), null);
-                });
+                Bukkit.getScheduler().runTask(plugin, () -> callback.handle(new Exception("Mismatch on keys and values length."), null));
                 return;
             }
 
-            String sql = "INSERT INTO " + table + " (" + String.join(",", keys) + ") VALUES (";
+            StringBuilder sql = new StringBuilder("INSERT INTO " + table + " (" + String.join(",", keys) + ") VALUES (");
             for (int i = 0; i < keys.length; i++) {
-                sql += "?";
-                if (i < keys.length - 1) sql += ",";
+                sql.append("?");
+                if (i < keys.length - 1) sql.append(",");
             }
-            sql += ");";
+            sql.append(");");
 
             PreparedStatement statement = null;
             try {
-                statement = connection.prepareStatement(sql);
+                statement = connection.prepareStatement(sql.toString());
 
                 for (int i = 0; i < keys.length; i++) {
                     this.set(values[i], i + 1, statement);
@@ -185,17 +187,17 @@ public abstract class SQL implements AsyncDatabase {
                 return;
             }
 
-            String sql = "UPDATE " + table + " SET ";
+            StringBuilder sql = new StringBuilder("UPDATE " + table + " SET ");
             for (int i = 0; i < keys.length; i++) {
-                sql += keys[i] + " = ?";
-                if (i < keys.length - 1) sql += ",";
+                sql.append(keys[i]).append(" = ?");
+                if (i < keys.length - 1) sql.append(",");
             }
 
-            sql += " WHERE " + whereKey + " = ?;";
+            sql.append(" WHERE ").append(whereKey).append(" = ?;");
             PreparedStatement statement = null;
 
             try {
-                statement = connection.prepareStatement(sql);
+                statement = connection.prepareStatement(sql.toString());
                 for (int i = 0; i < keys.length; i++) this.set(values[i], i + 1, statement);
                 this.set(whereValue, values.length + 1, statement);
                 long update = statement.executeUpdate();

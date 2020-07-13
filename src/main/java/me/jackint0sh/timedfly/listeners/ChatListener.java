@@ -140,9 +140,7 @@ public class ChatListener implements Listener {
                         if (FlyItemCreator.getInnerState(player) != FlyItemCreator.InnerState.CHANGE_OPTIONS) {
                             FlyItemCreator.clearState(FlyItemCreator.StateType.INNER_STATE, player);
                         }
-                        Bukkit.getScheduler().runTask(Hooks.getPlugin("TimedFly"), () -> {
-                            FlyItemCreator.openMenu(player);
-                        });
+                        Bukkit.getScheduler().runTask(Hooks.getPlugin("TimedFly"), () -> FlyItemCreator.openMenu(player));
                     }
                     event.setCancelled(true);
                 }

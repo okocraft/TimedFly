@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class TimeParser {
 
-    private static String[] timeString = {"seconds", "minutes", "hours", "days"};
+    private static final String[] timeString = {"seconds", "minutes", "hours", "days"};
 
     public static long parseNoException(String toParse) {
         try {

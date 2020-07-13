@@ -1,14 +1,18 @@
 package me.jackint0sh.timedfly.flygui;
 
 import me.jackint0sh.timedfly.hooks.currencies.Item;
+import me.jackint0sh.timedfly.interfaces.Currency;
 import me.jackint0sh.timedfly.managers.CurrencyManager;
 import me.jackint0sh.timedfly.utilities.Config;
-import me.jackint0sh.timedfly.interfaces.Currency;
 import me.jackint0sh.timedfly.utilities.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class FlyItem {
     private String key;
@@ -36,7 +40,7 @@ public class FlyItem {
     private boolean enableOnFlyDisable;
     private Currency currency;
     private Material currency_item;
-    private static Map<String, FlyItem> configItemMap = new HashMap<>();
+    private static final Map<String, FlyItem> configItemMap = new HashMap<>();
 
     public FlyItem() {
         this.key = UUID.randomUUID().toString();

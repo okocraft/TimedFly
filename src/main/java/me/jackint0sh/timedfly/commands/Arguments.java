@@ -12,8 +12,8 @@ public class Arguments {
         PERMISSIONS("permissions", "Show the list of available permissions."),
         EDITOR("editor", "Open the fly item creator.");
 
-        private String usage;
-        private String description;
+        private final String usage;
+        private final String description;
 
         TimedFly(String usage, String description) {
             this.usage = usage;
@@ -43,8 +43,8 @@ public class Arguments {
         TOGGLE("toggle [target]", "Toggles stop & resume of a player."),
         TIMELEFT("timeleft [target]", "Get the time left of a player.");
 
-        private String usage;
-        private String description;
+        private final String usage;
+        private final String description;
 
         TFly(String usage, String description) {
             this.usage = usage;

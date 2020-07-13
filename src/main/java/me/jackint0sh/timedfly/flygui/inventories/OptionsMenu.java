@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class OptionsMenu {
-    private static FlyInventory inventory = new FlyInventory(5, MessageUtil.color("&cFlyItem Editor - Options"));
+    private static final FlyInventory inventory = new FlyInventory(5, MessageUtil.color("&cFlyItem Editor - Options"));
 
     public static Inventory create(Player player, boolean b) {
         FlyItem flyItem = FlyItemCreator.getCurrentFlyItem(player);

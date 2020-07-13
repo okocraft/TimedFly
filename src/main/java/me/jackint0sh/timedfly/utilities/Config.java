@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentMap;
 
 public class Config {
 
-    private Plugin plugin;
-    private String name;
+    private static final ConcurrentMap<String, Config> configMap = new ConcurrentHashMap<>();
+    private final Plugin plugin;
     private File file;
     private FileConfiguration fileConfiguration;
-    private static ConcurrentMap<String, Config> configMap = new ConcurrentHashMap<>();
+    private final String name;
 
     public Config(String name, Plugin plugin) {
         this.name = name + ".yml";

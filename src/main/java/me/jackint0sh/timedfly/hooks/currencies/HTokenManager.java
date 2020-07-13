@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class HTokenManager implements Currency {
 
-    private TokenManager tokenManager = (TokenManager) Hooks.getPlugin("TokenManager");
+    private final TokenManager tokenManager = (TokenManager) Hooks.getPlugin("TokenManager");
 
     @Override
     public String name() {

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class SQLite extends SQL {
 
-    private Plugin plugin;
+    private final Plugin plugin;
 
     public SQLite(Plugin plugin) {
         super(plugin);

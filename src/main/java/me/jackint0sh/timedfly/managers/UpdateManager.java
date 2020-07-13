@@ -19,9 +19,9 @@ import java.util.Set;
 
 public class UpdateManager {
 
-    public int id;
-    public String currentVersion;
-    public boolean newUpdate;
+    public final int id;
+    public final String currentVersion;
+    public final boolean newUpdate;
 
     public UpdateManager(int id, String currentVersion) {
         this.id = id;

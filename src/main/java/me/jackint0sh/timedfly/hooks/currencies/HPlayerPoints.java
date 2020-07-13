@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 
 public class HPlayerPoints implements Currency {
 
-    private PlayerPoints playerPoints = (PlayerPoints) Hooks.getPlugin("PlayerPoints");
-    private PlayerPointsAPI api = playerPoints.getAPI();
+    private final PlayerPoints playerPoints = (PlayerPoints) Hooks.getPlugin("PlayerPoints");
+    private final PlayerPointsAPI api = playerPoints.getAPI();
 
     @Override
     public String name() {

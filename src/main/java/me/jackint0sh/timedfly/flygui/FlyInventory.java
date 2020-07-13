@@ -18,9 +18,9 @@ import java.util.function.Consumer;
 
 public class FlyInventory {
 
-    private Inventory inventory;
-    private Map<Integer, Item> items = new HashMap<>();
-    public static Map<String, FlyInventory> inventories = new HashMap<>();
+    public static final Map<String, FlyInventory> inventories = new HashMap<>();
+    private final Inventory inventory;
+    private final Map<Integer, Item> items = new HashMap<>();
     private Consumer<InventoryCloseEvent> closeConsumer;
 
     public FlyInventory(int rows) {

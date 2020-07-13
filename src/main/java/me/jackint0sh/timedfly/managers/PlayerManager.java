@@ -4,7 +4,11 @@ import me.jackint0sh.timedfly.events.TimedFlyEndEvent;
 import me.jackint0sh.timedfly.events.TimedFlyStartEvent;
 import me.jackint0sh.timedfly.flygui.FlyInventory;
 import me.jackint0sh.timedfly.flygui.inventories.FlightStore;
-import me.jackint0sh.timedfly.utilities.*;
+import me.jackint0sh.timedfly.utilities.Config;
+import me.jackint0sh.timedfly.utilities.MessageUtil;
+import me.jackint0sh.timedfly.utilities.Permissions;
+import me.jackint0sh.timedfly.utilities.PluginTask;
+import me.jackint0sh.timedfly.utilities.TimeParser;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -12,13 +16,17 @@ import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class PlayerManager {
 
-    private static Map<UUID, PlayerManager> playerCache = new ConcurrentHashMap<>();
+    private static final Map<UUID, PlayerManager> playerCache = new ConcurrentHashMap<>();
     private BukkitTask attackTimer;
     private boolean fallDamage;
     private boolean attacking;
@@ -36,7 +44,7 @@ public class PlayerManager {
     private boolean fromPlugin;
     private String lastItemUsed;
     private boolean inBlacklistedWorld;
-    private List<World> worlds;
+    private final List<World> worlds;
 
     private PlayerManager(UUID playerUuid) {
         this(playerUuid, 0, 0, false, true, false);

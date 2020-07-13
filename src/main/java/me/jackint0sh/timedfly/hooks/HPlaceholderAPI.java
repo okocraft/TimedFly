@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 public class HPlaceholderAPI extends PlaceholderExpansion {
 
 
-    private Plugin plugin;
+    private final Plugin plugin;
 
     HPlaceholderAPI(Plugin plugin) {
         this.plugin = plugin;

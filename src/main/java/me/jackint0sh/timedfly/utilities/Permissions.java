@@ -24,8 +24,8 @@ public enum  Permissions {
     CREATOR_DELETE("timedfly.creator.delete", "Delete available Fly Items."),
     CREATOR_ALL("timedfly.creator.all", "Create, edit, or delete Fly Items.");
 
-    private String permission;
-    private String description;
+    private final String permission;
+    private final String description;
 
     Permissions(String permission, String description) {
         this.permission = permission;

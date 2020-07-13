@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChangeItemMenu {
 
-    private static FlyInventory inventory = new FlyInventory(InventoryType.HOPPER, MessageUtil.color("&cChoose Item"));
+    private static final FlyInventory inventory = new FlyInventory(InventoryType.HOPPER, MessageUtil.color("&cChoose Item"));
 
     public static Inventory create(Player player, boolean b) {
         AtomicBoolean cancelled = new AtomicBoolean(false);

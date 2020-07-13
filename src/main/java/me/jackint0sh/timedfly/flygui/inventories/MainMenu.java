@@ -14,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 
 public class MainMenu {
 
-    private static FlyInventory inventory = new FlyInventory(InventoryType.HOPPER, MessageUtil.color("&cFlyItem Editor - Main Menu"));
+    private static final FlyInventory inventory = new FlyInventory(InventoryType.HOPPER, MessageUtil.color("&cFlyItem Editor - Main Menu"));
 
     public static Inventory create(Player player, boolean b) {
         FlyItemCreator.setMainState(player, FlyItemCreator.State.MAIN_MENU);

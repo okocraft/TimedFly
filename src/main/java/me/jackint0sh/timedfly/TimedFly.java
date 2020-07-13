@@ -1,11 +1,19 @@
 package me.jackint0sh.timedfly;
 
-import me.jackint0sh.timedfly.commands.*;
+import me.jackint0sh.timedfly.commands.Arguments;
+import me.jackint0sh.timedfly.commands.CustomCommand;
+import me.jackint0sh.timedfly.commands.Main;
+import me.jackint0sh.timedfly.commands.TFly;
+import me.jackint0sh.timedfly.commands.TabCompleter;
 import me.jackint0sh.timedfly.database.DatabaseHandler;
 import me.jackint0sh.timedfly.flygui.FlyInventory;
 import me.jackint0sh.timedfly.flygui.FlyItem;
 import me.jackint0sh.timedfly.hooks.Hooks;
-import me.jackint0sh.timedfly.listeners.*;
+import me.jackint0sh.timedfly.listeners.AttackListener;
+import me.jackint0sh.timedfly.listeners.ChatListener;
+import me.jackint0sh.timedfly.listeners.InventoryListener;
+import me.jackint0sh.timedfly.listeners.PlayerListener;
+import me.jackint0sh.timedfly.listeners.TimedFlyListener;
 import me.jackint0sh.timedfly.managers.PlayerManager;
 import me.jackint0sh.timedfly.managers.TimerManager;
 import me.jackint0sh.timedfly.managers.UpdateManager;
@@ -26,7 +34,7 @@ import java.util.Map;
 
 public final class TimedFly extends JavaPlugin {
 
-    public static boolean debug = true;
+    public static final boolean debug = true;
     private Config itemsConfig;
     private UpdateManager updateManager;
 
@@ -57,9 +65,7 @@ public final class TimedFly extends JavaPlugin {
             return valueMap;
         }));
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            PlayerListener.handlePlayerQuery(PlayerManager.getCachedPlayer(player.getUniqueId()), false);
-        });
+        Bukkit.getOnlinePlayers().forEach(player -> PlayerListener.handlePlayerQuery(PlayerManager.getCachedPlayer(player.getUniqueId()), false));
 
         MessageUtil.sendConsoleMessage("&cAssets loaded. Plugin ready!");
 

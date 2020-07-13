@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class EditorMenu {
 
-    private static FlyInventory inventory = new FlyInventory(1, MessageUtil.color("&cFlyItem Editor - Creator"));
+    private static final FlyInventory inventory = new FlyInventory(1, MessageUtil.color("&cFlyItem Editor - Creator"));
 
     public static Inventory create(Player player, boolean b) {
         FlyItem flyItem = FlyItemCreator.getCurrentFlyItem(player);

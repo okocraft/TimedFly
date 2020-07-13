@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class ConfirmationMenu {
 
-    private static FlyInventory inventory = new FlyInventory(InventoryType.HOPPER, MessageUtil.color("&cConfirm"));
+    private static final FlyInventory inventory = new FlyInventory(InventoryType.HOPPER, MessageUtil.color("&cConfirm"));
 
     public static Inventory create(Player player, boolean b) {
         Item yes = new Item(Material.EMERALD).setName(Languages.getString("item_editor.confirm.yes"))

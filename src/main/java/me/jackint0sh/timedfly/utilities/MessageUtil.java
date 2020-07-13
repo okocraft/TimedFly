@@ -1,8 +1,5 @@
 package me.jackint0sh.timedfly.utilities;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import me.jackint0sh.timedfly.managers.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,11 +14,11 @@ import java.util.stream.IntStream;
 
 public class MessageUtil {
 
-    public static String COMMAND_HELP_PREFIX = "&a» ";
-    public static String COMMAND_TIMEDFLY = "&e/timedfly ";
-    public static String COMMAND_TFLY = "&e/tfly ";
-    public static String DIVIDER = "&6&l------------------------------";
-    public static String PLUGIN_NAME = "&c&lTimedFly";
+    public static final String COMMAND_HELP_PREFIX = "&a» ";
+    public static final String COMMAND_TIMEDFLY = "&e/timedfly ";
+    public static final String COMMAND_TFLY = "&e/tfly ";
+    public static final String DIVIDER = "&6&l------------------------------";
+    public static final String PLUGIN_NAME = "&c&lTimedFly";
     public static String PLUGIN_PREFIX = null;
 
     public static String color(String text) {

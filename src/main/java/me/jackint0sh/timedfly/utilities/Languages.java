@@ -14,9 +14,9 @@ import java.util.Map;
 
 public class Languages {
 
-    private static Plugin plugin = Bukkit.getPluginManager().getPlugin("TimedFly");
-    private static Map<String, JsonElement> files = new Hashtable<>();
-    private static String lang = Config.getConfig("config").get().getString("Language");
+    private static final Plugin plugin = Bukkit.getPluginManager().getPlugin("TimedFly");
+    private static final Map<String, JsonElement> files = new Hashtable<>();
+    private static final String lang = Config.getConfig("config").get().getString("Language");
 
     public static void loadLang() {
         try {
@@ -32,9 +32,7 @@ public class Languages {
 
     public static void createFiles() {
         String[] languages = {"english"};
-        Arrays.stream(languages).forEach(language -> {
-            plugin.saveResource("languages/" + language + ".json", true);
-        });
+        Arrays.stream(languages).forEach(language -> plugin.saveResource("languages/" + language + ".json", true));
     }
 
     public static Object get(String path) {

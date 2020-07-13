@@ -8,8 +8,8 @@ import org.bukkit.event.HandlerList;
 public class TimedFlyRunningEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private PlayerManager playerManager;
-    private Player player;
+    private final PlayerManager playerManager;
+    private final Player player;
 
     public TimedFlyRunningEvent(PlayerManager playerManager) {
         this.playerManager = playerManager;

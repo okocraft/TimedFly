@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class HVault implements Currency {
 
-    private Economy economy;
+    private final Economy economy;
 
     public HVault(Economy economy) {
         this.economy = economy;

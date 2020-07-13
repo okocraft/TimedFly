@@ -1,6 +1,10 @@
 package me.jackint0sh.timedfly.flygui;
 
-import me.jackint0sh.timedfly.flygui.inventories.*;
+import me.jackint0sh.timedfly.flygui.inventories.ChangeItemMenu;
+import me.jackint0sh.timedfly.flygui.inventories.EditorMenu;
+import me.jackint0sh.timedfly.flygui.inventories.FlightStore;
+import me.jackint0sh.timedfly.flygui.inventories.MainMenu;
+import me.jackint0sh.timedfly.flygui.inventories.OptionsMenu;
 import me.jackint0sh.timedfly.managers.PlayerManager;
 import me.jackint0sh.timedfly.utilities.MessageUtil;
 import me.jackint0sh.timedfly.utilities.Permissions;
@@ -11,10 +15,10 @@ import java.util.Map;
 
 public class FlyItemCreator {
 
-    private static Map<Player, FlyItem> currentFlyItem = new HashMap<>();
-    private static Map<Player, FlyItemCreator.State> mainState = new HashMap<>();
-    private static Map<Player, FlyItemCreator.InnerState> innerState = new HashMap<>();
-    private static Map<Player, FlyItemCreator.OptionState> optionState = new HashMap<>();
+    private static final Map<Player, FlyItem> currentFlyItem = new HashMap<>();
+    private static final Map<Player, FlyItemCreator.State> mainState = new HashMap<>();
+    private static final Map<Player, FlyItemCreator.InnerState> innerState = new HashMap<>();
+    private static final Map<Player, FlyItemCreator.OptionState> optionState = new HashMap<>();
 
     public static void openMenu(Player player) {
         State state = getState(player);
