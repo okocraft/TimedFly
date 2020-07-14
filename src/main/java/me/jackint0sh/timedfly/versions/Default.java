@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 public class Default extends ServerVersion {
 
     public Default() {
-        serverVersion = this;
+        //serverVersion = this;
     }
 
     @Override

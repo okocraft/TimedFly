@@ -1,6 +1,7 @@
 package me.jackint0sh.timedfly.versions;
 
 import me.jackint0sh.timedfly.utilities.MessageUtil;
+import me.jackint0sh.timedfly.versions.v1_16.v1_16_R1;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
@@ -8,10 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class ServerVersion {
 
-    protected static ServerVersion serverVersion;
-
     public static ServerVersion getSupportedVersion() {
-        return serverVersion;
+        return v1_16_R1.v1_16;
     }
 
     public void sendActionBar(Player player, String text) {

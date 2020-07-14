@@ -20,15 +20,12 @@ import me.jackint0sh.timedfly.managers.UpdateManager;
 import me.jackint0sh.timedfly.utilities.Config;
 import me.jackint0sh.timedfly.utilities.Languages;
 import me.jackint0sh.timedfly.utilities.MessageUtil;
-import me.jackint0sh.timedfly.versions.Default;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -169,7 +166,8 @@ public final class TimedFly extends JavaPlugin {
 
         MessageUtil.sendConsoleMessage("Your server is running version &6" + version);
 
-        try {
+/*
+    	try {
             Class<?> clazz = Class.forName("me.jackint0sh.timedfly.versions." + version.substring(0, version.length() - 3) + "." + version);
             Constructor<?> ctor = clazz.getConstructor();
             ctor.newInstance();
@@ -177,6 +175,7 @@ public final class TimedFly extends JavaPlugin {
             MessageUtil.sendError(e.getMessage());
             new Default();
         }
+*/
 
         return true;
     }

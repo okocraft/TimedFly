@@ -7,6 +7,8 @@ import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 
 public class v1_16_R1 extends ServerVersion {
 
+    public final static ServerVersion v1_16 = new v1_16_R1();
+
     @Override
     public org.bukkit.inventory.ItemStack setNBT(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
         ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
