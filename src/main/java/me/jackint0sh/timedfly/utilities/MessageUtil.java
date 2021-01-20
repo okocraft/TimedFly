@@ -1,6 +1,9 @@
 package me.jackint0sh.timedfly.utilities;
 
 import me.jackint0sh.timedfly.managers.PlayerManager;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -191,5 +194,17 @@ public class MessageUtil {
 
     public static void setPluginName() {
         PLUGIN_PREFIX = Config.getConfig("config").get().getString("Prefix");
+    }
+
+    public static void sendActionBar(Player player, String text) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(MessageUtil.color(text)));
+    }
+
+    public static void sendTitle(Player player, String title, String subtile) {
+        player.sendTitle(title, subtile, 0, 5 * 20, 0);
+    }
+
+    public static void sendTitle(Player player, String title, String subtile, int fadeIn, int stay, int fadeOut) {
+        player.sendTitle(title, subtile, fadeIn, stay, fadeOut);
     }
 }

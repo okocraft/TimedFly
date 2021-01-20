@@ -1,7 +1,6 @@
 package me.jackint0sh.timedfly.flygui;
 
 import me.jackint0sh.timedfly.utilities.MessageUtil;
-import me.jackint0sh.timedfly.versions.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -9,6 +8,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -117,7 +117,7 @@ public class FlyInventory {
         if (e instanceof InventoryCloseEvent) {
             Arrays.stream(this.getInventory().getContents())
                     .filter(Objects::nonNull)
-                    .filter(itemStack -> !ServerVersion.getSupportedVersion().hasTag(itemStack, "customitem"))
+                    .filter(itemStack -> !itemStack.getItemMeta().getPersistentDataContainer().has(Item.CUSTOMITEM_KEY, PersistentDataType.BYTE))
                     .forEach(item -> {
                         Player player = (Player) ((InventoryCloseEvent) e).getPlayer();
                         Map<Integer, ItemStack> contents = player.getInventory().addItem(item);

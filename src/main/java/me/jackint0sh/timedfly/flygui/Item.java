@@ -1,8 +1,9 @@
 package me.jackint0sh.timedfly.flygui;
 
+import me.jackint0sh.timedfly.TimedFly;
 import me.jackint0sh.timedfly.utilities.MessageUtil;
-import me.jackint0sh.timedfly.versions.ServerVersion;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +21,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Item extends ItemStack {
+
+    public static final NamespacedKey CUSTOMITEM_KEY = new NamespacedKey(TimedFly.getPlugin(TimedFly.class), "customitem");
+    public static final NamespacedKey KEY = new NamespacedKey(TimedFly.getPlugin(TimedFly.class), "key");
 
     private Set<ItemFlag> itemFlags;
     private ItemMeta itemMeta;
@@ -46,7 +51,10 @@ public class Item extends ItemStack {
     }
 
     public Item(Material material) {
-        super(ServerVersion.getSupportedVersion().setNBT(new ItemStack(material), "customitem", "true"));
+        super(new ItemStack(material));
+        ItemMeta meta = getItemMeta();
+        meta.getPersistentDataContainer().set(CUSTOMITEM_KEY, PersistentDataType.BYTE, (byte) 1);
+        setItemMeta(meta);
         loadItem();
     }
 
@@ -56,7 +64,9 @@ public class Item extends ItemStack {
     }
 
     public Item setKey(String key) {
-        ServerVersion.getSupportedVersion().setNBT(this, "key", key);
+        ItemMeta meta = getItemMeta();
+        meta.getPersistentDataContainer().set(KEY, PersistentDataType.STRING, key);
+        setItemMeta(meta);
         return this;
     }
 

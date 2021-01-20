@@ -12,7 +12,7 @@ import me.jackint0sh.timedfly.utilities.TimeParser;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 

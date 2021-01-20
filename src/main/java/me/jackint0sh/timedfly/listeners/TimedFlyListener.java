@@ -9,7 +9,6 @@ import me.jackint0sh.timedfly.utilities.Config;
 import me.jackint0sh.timedfly.utilities.Languages;
 import me.jackint0sh.timedfly.utilities.MessageUtil;
 import me.jackint0sh.timedfly.utilities.TimeParser;
-import me.jackint0sh.timedfly.versions.ServerVersion;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +34,7 @@ public class TimedFlyListener implements Listener {
 
         if (Config.getConfig("config").get().getBoolean("Messages.ActionBar") && playerManager.getTimeLeft() > 0) {
             if (translate != null) {
-                ServerVersion.getSupportedVersion().sendActionBar(player, translate.replace("[time_left]", timeLeft));
+                MessageUtil.sendActionBar(player, translate.replace("[time_left]", timeLeft));
             }
         }
 
@@ -53,7 +52,7 @@ public class TimedFlyListener implements Listener {
                 }
                 if (subtitle == null) subtitle = "";
 
-                ServerVersion.getSupportedVersion().sendTitle(player,
+                MessageUtil.sendTitle(player,
                         title.replace("[time_left]", timeLeft),
                         subtitle.replace("[time_left]", timeLeft),
                         0, 45, 0
@@ -92,11 +91,11 @@ public class TimedFlyListener implements Listener {
         }
 
         if (Config.getConfig("config").get().getBoolean("Messages.ActionBar")) {
-            ServerVersion.getSupportedVersion().sendActionBar(player, action_bar);
+            MessageUtil.sendActionBar(player, action_bar);
         }
 
         if (Config.getConfig("config").get().getBoolean("Messages.Title")) {
-            ServerVersion.getSupportedVersion().sendTitle(player, title, subtitle);
+            MessageUtil.sendTitle(player, title, subtitle);
         }
 
         if (Config.getConfig("config").get().getBoolean("Messages.Chat")) {

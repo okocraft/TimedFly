@@ -58,7 +58,6 @@ public final class TimedFly extends JavaPlugin {
         MessageUtil.sendConsoleMessage("&cWelcome to TimedFly");
         MessageUtil.sendConsoleMessage("&cLoading assets...");
 
-        if (!this.initializeSupportedVersion()) return;
         this.initializeConfigurations();
         if (!DatabaseHandler.initialize()) return;
         this.initializeLanguages();
@@ -152,32 +151,6 @@ public final class TimedFly extends JavaPlugin {
         Hooks.hookPapi(this);
 
         MessageUtil.sendConsoleMessage("&cAll plugins hooked!");
-    }
-
-    private boolean initializeSupportedVersion() {
-        String version;
-        try {
-            version = getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            MessageUtil.sendError(e.getMessage());
-            Bukkit.getPluginManager().disablePlugin(this);
-            return false;
-        }
-
-        MessageUtil.sendConsoleMessage("Your server is running version &6" + version);
-
-/*
-    	try {
-            Class<?> clazz = Class.forName("me.jackint0sh.timedfly.versions." + version.substring(0, version.length() - 3) + "." + version);
-            Constructor<?> ctor = clazz.getConstructor();
-            ctor.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            MessageUtil.sendError(e.getMessage());
-            new Default();
-        }
-*/
-
-        return true;
     }
 
     private void initializeLanguages() {
